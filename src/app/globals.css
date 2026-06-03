@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+@theme {
+  /* Primary — Grammarly teal */
+  --color-primary-50:  #edfdf8;
+  --color-primary-100: #d2faf0;
+  --color-primary-200: #a8f4e1;
+  --color-primary-300: #6eeacb;
+  --color-primary-400: #38d9b1;
+  --color-primary-500: #15c39a;
+  --color-primary-600: #0fa882;
+  --color-primary-700: #0d8a6a;
+  --color-primary-800: #0c6e55;
+  --color-primary-900: #0b5442;
+
+  /* Neutral */
+  --color-neutral-50:  #f9fafb;
+  --color-neutral-100: #f3f4f6;
+  --color-neutral-200: #e5e7eb;
+  --color-neutral-300: #d1d5db;
+  --color-neutral-400: #9ca3af;
+  --color-neutral-500: #6b7280;
+  --color-neutral-600: #4b5563;
+  --color-neutral-700: #374151;
+  --color-neutral-800: #1f2937;
+  --color-neutral-900: #111827;
+
+  /* Fonts */
+  --font-sans: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, monospace;
+
+  /* Shadows */
+  --shadow-card:    0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-card-hover: 0 8px 24px rgba(0,0,0,0.09), 0 2px 6px rgba(0,0,0,0.05);
+  --shadow-teal-glow: 0 0 0 3px rgba(21,195,154,0.20);
+
+  /* Easing */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring:   cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* Pastel section backgrounds */
+  --color-pastel-mint:    #e8fdf5;
+  --color-pastel-lavender: #f0edff;
+  --color-pastel-peach:   #fff3ed;
+  --color-pastel-sky:     #ecf6ff;
+  --color-pastel-rose:    #fff0f3;
+  --color-pastel-lemon:   #fffde8;
+
+  /* Animations */
+  --animate-fade-in:       fade-in 180ms ease-out;
+  --animate-slide-up:      slide-up 220ms ease-out;
+  --animate-pulse-success: pulse-success 320ms ease-out;
+  --animate-shimmer:       shimmer 1.6s linear infinite;
+
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes slide-up {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pulse-success {
+    0%, 100% { transform: scale(1); }
+    50%       { transform: scale(1.04); }
+  }
+  @keyframes shimmer {
+    from { background-position: -200% 0; }
+    to   { background-position:  200% 0; }
+  }
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #111827;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
