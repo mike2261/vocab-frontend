@@ -1,0 +1,41 @@
+# Lexio
+
+> Lexio is an AI-powered English vocabulary learning app built for Vietnamese learners. It combines spaced repetition, AI-generated definitions, and a Chrome extension for capturing words while browsing.
+
+## What Lexio does
+
+- **Save any word instantly**: Highlight a word on any webpage and the Chrome extension saves it with one click
+- **AI auto-fills everything**: Word definition, IPA pronunciation (UK/US), CEFR level (A1–C2), Vietnamese translation, and 1–2 example sentences — generated automatically via LLM
+- **Spaced repetition review**: Words move through 5 stages (New → Learning → Familiar → Confident → Mastered) using an SM-2-style algorithm
+- **Two review modes**: Flashcard (flip card, rate Forgot / Hard / Good / Easy) or AI Passage (LLM generates a short reading passage using your due words around a topic you choose)
+- **Vietnamese translations**: Every definition includes a Vietnamese gloss — designed for Vietnamese learners of English
+
+## Who it is for
+
+Vietnamese learners of English at intermediate to advanced level (B1–C2), including IELTS and TOEIC test-takers, students, and young professionals who want to build vocabulary from real content they read online.
+
+## How it works
+
+1. Install the Chrome extension
+2. Browse any website — articles, Reddit, news, papers
+3. Highlight an unfamiliar word → save to Lexio in one click
+4. Lexio auto-generates the dictionary entry with Vietnamese translation
+5. Review due words daily using flashcards or AI-generated passages
+6. Words advance through 5 mastery stages based on your ratings
+
+## Technology
+
+- Web app: Next.js (React), Tailwind CSS
+- Backend API: Node.js, Fastify, PostgreSQL, Prisma
+- Chrome Extension: Manifest V3
+- AI: OpenRouter (LLM) for definition generation and passage creation
+- Auth: JWT + Google OAuth
+
+## Pricing
+
+Free to use. No paywall on core features.
+
+## Links
+
+- Web app: https://lexio.app
+- Chrome extension: https://lexio.app/extension

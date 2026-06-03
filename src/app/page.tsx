@@ -4,10 +4,20 @@ import { FeaturesSection } from "@/components/FeaturesSection";
 import { DemoSection } from "@/components/DemoSection";
 import { HowItWorks } from "@/components/HowItWorks";
 import { CTASection } from "@/components/CTASection";
+import { JsonLd } from "@/components/JsonLd";
+import type { Metadata } from "next";
+import { SITE } from "@/lib/site";
+
+export const metadata: Metadata = {
+  title: `${SITE.name} — ${SITE.tagline}`,
+  description: SITE.description,
+  alternates: { canonical: SITE.url },
+};
 
 export default function Home() {
   return (
     <>
+      <JsonLd />
       <Navbar />
       <main>
         <HeroSection />

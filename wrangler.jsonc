@@ -1,0 +1,29 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "vocab-web",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-09-24",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "vocab-web"
+    }
+  ],
+  "vars": {
+    "NEXT_PUBLIC_API_URL": "http://vocab-backend.anhduc22601.workers.dev/api",
+    "NEXT_PUBLIC_GSI_CLIENT_ID": "378409902166-h4k2vk0qvrgdt7go4emcko1192i58jte.apps.googleusercontent.com"
+  },
+  "observability": {
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "persist": true,
+      "invocation_logs": true
+    }
+  }
+}
