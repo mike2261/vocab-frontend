@@ -2,7 +2,7 @@
 
 import { BookOpen, Loader2 } from 'lucide-react';
 import Script from 'next/script';
-import { useCallback, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -18,12 +18,21 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [gsiReady, setGsiReady] = useState(false);
 
   const googleBtnRef = useRef<HTMLDivElement>(null);
+  const loginWithGoogleRef = useRef(loginWithGoogle);
+  loginWithGoogleRef.current = loginWithGoogle;
 
-  const initGSI = useCallback(() => {
+  // Mark GSI script as ready when it loads
+  function handleGSILoad() {
+    setGsiReady(true);
+  }
+
+  // Render button once both script is loaded and div is mounted
+  useEffect(() => {
     const clientId = process.env.NEXT_PUBLIC_GSI_CLIENT_ID;
-    if (!clientId || !window.google || !googleBtnRef.current) return;
+    if (!gsiReady || !clientId || !googleBtnRef.current) return;
 
     window.google.accounts.id.initialize({
       client_id: clientId,
@@ -31,7 +40,7 @@ export default function LoginPage() {
         setError(null);
         setIsGoogleLoading(true);
         try {
-          await loginWithGoogle(response.credential);
+          await loginWithGoogleRef.current(response.credential);
           router.replace('/dashboard');
         } catch (err) {
           setError(err instanceof Error ? err.message : 'Google sign-in failed');
@@ -44,10 +53,10 @@ export default function LoginPage() {
       type: 'standard',
       theme: 'outline',
       size: 'large',
-      width: googleBtnRef.current.offsetWidth || 320,
+      width: googleBtnRef.current.offsetWidth || 360,
       text: 'continue_with',
     });
-  }, [loginWithGoogle, router]);
+  }, [gsiReady, router]);
 
   async function handleEmailSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -79,7 +88,7 @@ export default function LoginPage() {
 
   return (
     <>
-      <Script src="https://accounts.google.com/gsi/client" onLoad={initGSI} />
+      <Script src="https://accounts.google.com/gsi/client" onLoad={handleGSILoad} />
 
       <div className="bg-white border border-neutral-200 rounded-2xl shadow-sm p-8">
         {/* Logo */}
