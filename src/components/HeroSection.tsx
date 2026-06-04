@@ -2,9 +2,11 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { FlashCard } from "./FlashCard";
 
 export function HeroSection() {
+  const router = useRouter();
   return (
     <section className="min-h-screen flex items-center pt-14">
       <div className="max-w-5xl mx-auto px-6 py-24 w-full">
@@ -49,6 +51,7 @@ export function HeroSection() {
               className="flex flex-wrap gap-3"
             >
               <motion.button
+                onClick={() => router.push('/login')}
                 whileHover={{ scale: 1.02, y: -1 }}
                 whileTap={{ scale: 0.97 }}
                 transition={{ type: "spring", stiffness: 300, damping: 22 }}

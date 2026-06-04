@@ -2,8 +2,11 @@
 
 import { motion } from "framer-motion";
 import { BookOpen } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export function Navbar() {
+  const router = useRouter();
+
   return (
     <motion.nav
       initial={{ opacity: 0, y: -8 }}
@@ -26,6 +29,7 @@ export function Navbar() {
         </div>
 
         <motion.button
+          onClick={() => router.push('/login')}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.97 }}
           className="px-4 py-2 bg-primary-500 text-white text-sm font-500 rounded-lg hover:bg-primary-600 transition-colors"

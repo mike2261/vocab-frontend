@@ -2,8 +2,10 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export function CTASection() {
+  const router = useRouter();
   return (
     <section className="py-24">
       <div className="max-w-2xl mx-auto px-6 text-center">
@@ -26,6 +28,7 @@ export function CTASection() {
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <motion.button
+              onClick={() => router.push('/login')}
               whileHover={{ scale: 1.02, y: -1 }}
               whileTap={{ scale: 0.97 }}
               transition={{ type: "spring", stiffness: 300, damping: 22 }}
@@ -38,9 +41,9 @@ export function CTASection() {
 
           <p className="mt-6 text-xs text-neutral-400">
             Already learning with Lexio?{" "}
-            <a href="#" className="text-primary-500 hover:underline">
+            <button onClick={() => router.push('/login')} className="text-primary-500 hover:underline">
               Sign in
-            </a>
+            </button>
           </p>
         </motion.div>
       </div>
