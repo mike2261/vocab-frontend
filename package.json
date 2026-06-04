@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "eslint",
     "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "deploy": "NEXT_PUBLIC_API_URL=https://vocab-backend.anhduc22601.workers.dev/api opennextjs-cloudflare build && opennextjs-cloudflare deploy"
+    "deploy": "NEXT_PUBLIC_API_URL=https://vocab-backend.anhduc22601.workers.dev/api NEXT_PUBLIC_GSI_CLIENT_ID=378409902166-h4k2vk0qvrgdt7go4emcko1192i58jte.apps.googleusercontent.com opennextjs-cloudflare build && opennextjs-cloudflare deploy"
   },
   "dependencies": {
     "@opennextjs/cloudflare": "^1.19.11",
