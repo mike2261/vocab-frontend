@@ -55,6 +55,7 @@ export default function LoginPage() {
       size: 'large',
       width: googleBtnRef.current.offsetWidth || 360,
       text: 'continue_with',
+      locale: 'en',
     });
   }, [gsiReady, router]);
 

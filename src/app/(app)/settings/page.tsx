@@ -98,25 +98,25 @@ export default function SettingsPage() {
 
               <div className="space-y-4">
                 {Object.keys(STAGE_LABELS).map((stage) => (
-                  <div key={stage} className="flex items-center gap-4">
+                  <div key={stage} className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
                     <label className="flex-1 text-sm text-neutral-700">
                       {STAGE_LABELS[stage]}
                     </label>
-                    <input
-                      type="number"
-                      min={0}
-                      value={thresholds[stage] ?? 0}
-                      onChange={(e) =>
-                        setThresholds((prev) => ({
-                          ...prev,
-                          [stage]: Number(e.target.value),
-                        }))
-                      }
-                      className="w-20 px-3 py-2 border border-neutral-300 rounded-lg text-sm text-center focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500 transition"
-                    />
-                    <span className="text-xs text-neutral-400 w-16">
-                      reviews
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="number"
+                        min={0}
+                        value={thresholds[stage] ?? 0}
+                        onChange={(e) =>
+                          setThresholds((prev) => ({
+                            ...prev,
+                            [stage]: Number(e.target.value),
+                          }))
+                        }
+                        className="w-20 px-3 py-2 border border-neutral-300 rounded-lg text-sm text-center focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500 transition"
+                      />
+                      <span className="text-xs text-neutral-400">reviews</span>
+                    </div>
                   </div>
                 ))}
               </div>

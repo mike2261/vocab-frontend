@@ -37,9 +37,9 @@ function WordTable({ words }: { words: VocabWord[] }) {
       <table className="w-full">
         <thead>
           <tr className="text-left border-b border-neutral-100">
-            <th className="px-5 py-3 text-xs font-500 text-neutral-400 uppercase tracking-wide">Word</th>
-            <th className="px-5 py-3 text-xs font-500 text-neutral-400 uppercase tracking-wide">Definition (EN)</th>
-            <th className="px-5 py-3 text-xs font-500 text-neutral-400 uppercase tracking-wide">Type</th>
+            <th className="px-4 sm:px-5 py-3 text-xs font-500 text-neutral-400 uppercase tracking-wide">Word</th>
+            <th className="px-4 sm:px-5 py-3 text-xs font-500 text-neutral-400 uppercase tracking-wide">Definition (EN)</th>
+            <th className="hidden sm:table-cell px-4 sm:px-5 py-3 text-xs font-500 text-neutral-400 uppercase tracking-wide">Type</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-neutral-50">
@@ -47,7 +47,7 @@ function WordTable({ words }: { words: VocabWord[] }) {
             const first = w.meanings?.[0];
             return (
               <tr key={w.id} className="hover:bg-neutral-50 transition-colors">
-                <td className="px-5 py-3 w-36">
+                <td className="px-4 sm:px-5 py-3 w-28 sm:w-36">
                   <Link
                     href={`/vocabulary/${w.id}`}
                     className="font-600 text-sm text-neutral-900 hover:text-primary-600 transition-colors font-mono"
@@ -55,10 +55,10 @@ function WordTable({ words }: { words: VocabWord[] }) {
                     {w.word}
                   </Link>
                 </td>
-                <td className="px-5 py-3 text-sm text-neutral-600">
+                <td className="px-4 sm:px-5 py-3 text-sm text-neutral-600">
                   <span className="line-clamp-1">{first?.definition ?? '—'}</span>
                 </td>
-                <td className="px-5 py-3 w-32 shrink-0">
+                <td className="hidden sm:table-cell px-4 sm:px-5 py-3 w-32 shrink-0">
                   {first?.partOfSpeech ? (
                     <span className="px-2 py-0.5 bg-neutral-100 text-neutral-600 rounded text-xs font-500">
                       {first.partOfSpeech}
