@@ -6,7 +6,7 @@ import { AddWordModal } from '@/components/app/AddWordModal';
 import { useSidebar } from '@/contexts/SidebarContext';
 
 interface TopBarProps {
-  title: string;
+  title?: string;
 }
 
 export function TopBar({ title }: TopBarProps) {
@@ -24,7 +24,7 @@ export function TopBar({ title }: TopBarProps) {
           >
             <Menu size={20} />
           </button>
-          <h1 className="text-base sm:text-lg font-600 text-neutral-900">{title}</h1>
+          {title && <h1 className="text-base sm:text-lg font-600 text-neutral-900">{title}</h1>}
         </div>
         <button
           onClick={() => setShowModal(true)}

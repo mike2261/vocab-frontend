@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { TopBar } from '@/components/app/TopBar';
 import { StageBadge } from '@/components/app/StageBadge';
+import { PosBadge } from '@/components/app/PosBadge';
 import { api } from '@/lib/api';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -274,11 +275,7 @@ export default function VocabDetailPage({
               {word.meanings.map((m, i) => (
                 <div key={i} className="pb-5 border-b border-neutral-100 last:border-0 last:pb-0">
                   <div className="flex items-center gap-2 mb-1.5">
-                    {m.partOfSpeech && (
-                      <span className="px-2 py-0.5 bg-neutral-100 text-neutral-600 rounded text-xs font-500">
-                        {m.partOfSpeech}
-                      </span>
-                    )}
+                    {m.partOfSpeech && <PosBadge pos={m.partOfSpeech} />}
                     {m.cefrLevel && (
                       <span
                         className={`px-2 py-0.5 rounded text-xs font-500 ${

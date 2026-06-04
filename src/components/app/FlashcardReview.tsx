@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { CheckCircle, Loader2, RotateCcw } from 'lucide-react';
 import { api } from '@/lib/api';
 import { useAuth } from '@/contexts/AuthContext';
+import { PosBadge } from '@/components/app/PosBadge';
 
 interface Example {
   sentence: string;
@@ -233,11 +234,7 @@ export function FlashcardReview() {
             <div className="space-y-3">
               {meanings.slice(0, 3).map((m, i) => (
                 <div key={i}>
-                  {m.partOfSpeech && (
-                    <span className="text-xs font-500 text-primary-600 uppercase tracking-wide">
-                      {m.partOfSpeech}
-                    </span>
-                  )}
+                  {m.partOfSpeech && <PosBadge pos={m.partOfSpeech} className="mb-1" />}
                   <p className="text-sm text-neutral-700">{m.definition}</p>
                   {m.translation && (
                     <p className="text-xs text-neutral-400 mt-0.5">

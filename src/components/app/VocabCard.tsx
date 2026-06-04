@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Clock } from 'lucide-react';
 import { StageBadge } from '@/components/app/StageBadge';
+import { PosBadge } from '@/components/app/PosBadge';
 
 interface Meaning {
   definition: string;
@@ -51,20 +52,17 @@ export function VocabCard({
       </div>
 
       {firstMeaning && (
-        <p className="text-sm text-neutral-500 line-clamp-2 mb-3">
+        <div className="mb-3">
           {firstMeaning.partOfSpeech && (
-            <span className="text-xs text-neutral-400 mr-1">
-              {firstMeaning.partOfSpeech}
-            </span>
+            <PosBadge pos={firstMeaning.partOfSpeech} className="mb-1.5" />
           )}
-          {firstMeaning.definition}
-        </p>
-      )}
-
-      {meanings && meanings.length > 1 && (
-        <p className="text-xs text-neutral-400 mb-3">
-          +{meanings.length - 1} more meaning{meanings.length - 1 !== 1 ? 's' : ''}
-        </p>
+          <p className="text-sm text-neutral-500 line-clamp-2">{firstMeaning.definition}</p>
+          {meanings && meanings.length > 1 && (
+            <p className="text-xs text-neutral-400 mt-1">
+              +{meanings.length - 1} more meaning{meanings.length - 1 !== 1 ? 's' : ''}
+            </p>
+          )}
+        </div>
       )}
 
       <div className="flex items-center gap-1.5 text-xs text-neutral-400">
