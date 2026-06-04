@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Clock } from 'lucide-react';
 import { StageBadge } from '@/components/app/StageBadge';
 import { PosBadge } from '@/components/app/PosBadge';
+import { parseApiDate } from '@/lib/datetime';
 
 interface Meaning {
   definition: string;
@@ -20,7 +21,8 @@ interface VocabCardProps {
 
 function formatNextReview(dateStr: string | null | undefined): string {
   if (!dateStr) return 'Not scheduled';
-  const date = new Date(dateStr);
+  const date = parseApiDate(dateStr);
+  if (!date) return 'Not scheduled';
   const now = new Date();
   const diffMs = date.getTime() - now.getTime();
   if (diffMs < 0) return 'Due now';

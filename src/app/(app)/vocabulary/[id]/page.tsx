@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   ArrowLeft,
+  CalendarDays,
   Clock,
   Loader2,
   Pencil,
@@ -13,9 +14,10 @@ import {
   X,
 } from 'lucide-react';
 import { TopBar } from '@/components/app/TopBar';
-import { StageBadge } from '@/components/app/StageBadge';
+import { getStageLabel, StageBadge } from '@/components/app/StageBadge';
 import { PosBadge } from '@/components/app/PosBadge';
 import { api } from '@/lib/api';
+import { APP_TIMEZONE_LABEL, formatAppDateTime } from '@/lib/datetime';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface Example {
@@ -48,22 +50,12 @@ interface ReviewHistoryItem {
 interface VocabDetail {
   id: string;
   word: string;
+  createdAt?: string;
   pronunciationUk?: string | null;
   pronunciationUs?: string | null;
   reviewState?: ReviewState | null;
   meanings?: Meaning[];
   reviewHistory?: ReviewHistoryItem[];
-}
-
-function formatDate(d: string | null | undefined) {
-  if (!d) return '—';
-  return new Date(d).toLocaleDateString(undefined, {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
 }
 
 const CEFR_COLORS: Record<string, string> = {
@@ -177,6 +169,9 @@ export default function VocabDetailPage({
     );
   }
 
+  const currentStage = word.reviewState?.stage ?? 1;
+  const currentStageLabel = getStageLabel(currentStage);
+
   return (
     <div className="flex flex-col flex-1">
       <TopBar title="Word Detail" />
@@ -219,7 +214,7 @@ export default function VocabDetailPage({
               )}
             </div>
             <div className="flex items-center gap-2 shrink-0">
-              <StageBadge stage={word.reviewState?.stage ?? 1} />
+              <StageBadge stage={currentStage} />
               {isEditing ? (
                 <>
                   <button
@@ -254,15 +249,25 @@ export default function VocabDetailPage({
             </div>
           </div>
 
-          {/* Review state */}
-          <div className="flex flex-wrap gap-4 text-sm text-neutral-500">
+          <div className="flex flex-wrap gap-4 border-t border-neutral-100 pt-4 text-sm text-neutral-500">
             <div className="flex items-center gap-1.5">
-              <Clock size={14} />
-              Last reviewed: {formatDate(word.reviewState?.lastReviewedAt)}
+              <CalendarDays size={14} />
+              Added: {formatAppDateTime(word.createdAt)}
+            </div>
+            <div className="flex items-center gap-1.5">
+              <StageBadge stage={currentStage} className="mr-1" />
+              Stage {currentStage}: {currentStageLabel}
             </div>
             <div className="flex items-center gap-1.5">
               <Clock size={14} />
-              Next review: {formatDate(word.reviewState?.nextReviewAt)}
+              Last reviewed: {formatAppDateTime(word.reviewState?.lastReviewedAt)}
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Clock size={14} />
+              Next review: {formatAppDateTime(word.reviewState?.nextReviewAt)}
+            </div>
+            <div className="text-xs text-neutral-400">
+              Times shown in {APP_TIMEZONE_LABEL}
             </div>
           </div>
         </div>
@@ -334,7 +339,7 @@ export default function VocabDetailPage({
                 {reviewHistory.map((r) => (
                   <tr key={r.id}>
                     <td className="py-2.5 text-neutral-600">
-                      {formatDate(r.reviewedAt)}
+                      {formatAppDateTime(r.reviewedAt)}
                     </td>
                     <td className="py-2.5">
                       <span

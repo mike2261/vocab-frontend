@@ -4,6 +4,7 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { BookOpen, Menu, X } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { getStoredToken } from "@/lib/auth";
 
 const NAV_LINKS = [
   { href: "#features", label: "Features" },
@@ -14,6 +15,10 @@ const NAV_LINKS = [
 export function Navbar() {
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
+
+  function handleCTA() {
+    router.push(getStoredToken() ? '/dashboard' : '/login');
+  }
 
   return (
     <>
@@ -44,7 +49,7 @@ export function Navbar() {
           {/* Right side */}
           <div className="flex items-center gap-2">
             <motion.button
-              onClick={() => router.push('/login')}
+              onClick={() => handleCTA()}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.97 }}
               className="hidden md:block px-4 py-2 bg-primary-500 text-white text-sm font-500 rounded-lg hover:bg-primary-600 transition-colors"
@@ -86,7 +91,7 @@ export function Navbar() {
                 </a>
               ))}
               <button
-                onClick={() => { router.push('/login'); setMobileOpen(false); }}
+                onClick={() => { handleCTA(); setMobileOpen(false); }}
                 className="mt-1 w-full py-2.5 bg-primary-500 text-white text-sm font-500 rounded-lg hover:bg-primary-600 transition-colors"
               >
                 Get started free

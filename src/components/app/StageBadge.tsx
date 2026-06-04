@@ -3,7 +3,7 @@ interface StageBadgeProps {
   className?: string;
 }
 
-const STAGE_MAP: Record<
+export const STAGE_MAP: Record<
   number,
   { label: string; className: string }
 > = {
@@ -28,6 +28,10 @@ const STAGE_MAP: Record<
     className: 'bg-green-50 text-green-800 border-green-200',
   },
 };
+
+export function getStageLabel(stage: number) {
+  return (STAGE_MAP[stage] ?? STAGE_MAP[1]).label;
+}
 
 export function StageBadge({ stage, className = '' }: StageBadgeProps) {
   const config = STAGE_MAP[stage] ?? STAGE_MAP[1];

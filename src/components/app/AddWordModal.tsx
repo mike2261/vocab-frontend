@@ -17,15 +17,20 @@ export function AddWordModal({ onClose }: AddWordModalProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  function normalizeWordInput(value: string) {
+    return value.trim().toLowerCase();
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!word.trim()) return;
+    const normalizedWord = normalizeWordInput(word);
+    if (!normalizedWord) return;
     setError(null);
     setIsLoading(true);
     try {
       const res = await api.post<{ data: { id: string } }>(
         '/vocabularies',
-        { word: word.trim() },
+        { word: normalizedWord },
         token ?? undefined,
       );
       onClose();
@@ -81,7 +86,7 @@ export function AddWordModal({ onClose }: AddWordModalProps) {
               autoFocus
               required
               value={word}
-              onChange={(e) => setWord(e.target.value)}
+              onChange={(e) => setWord(e.target.value.toLowerCase())}
               placeholder="e.g. ephemeral, break the ice…"
               className="w-full px-3.5 py-2.5 border border-neutral-300 rounded-lg text-sm text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500 transition"
             />
@@ -97,7 +102,7 @@ export function AddWordModal({ onClose }: AddWordModalProps) {
             </button>
             <button
               type="submit"
-              disabled={isLoading || !word.trim()}
+              disabled={isLoading || !normalizeWordInput(word)}
               className="flex-1 py-2.5 bg-primary-500 text-white font-500 rounded-lg hover:bg-primary-600 transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {isLoading ? (

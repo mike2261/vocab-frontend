@@ -1,5 +1,5 @@
 const BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8787/api';
+  process.env.NEXT_PUBLIC_API_URL || 'https://vocab-backend.anhduc22601.workers.dev/api';
 
 export class ApiError extends Error {
   constructor(
@@ -17,7 +17,6 @@ async function request<T>(
   options: RequestInit & { token?: string } = {},
 ): Promise<T> {
   const { token, ...init } = options;
-
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     ...(init.headers as Record<string, string>),
@@ -27,6 +26,7 @@ async function request<T>(
     headers['Authorization'] = `Bearer ${token}`;
   }
 
+  console.log('API Request:', BASE_URL);
   const res = await fetch(`${BASE_URL}${path}`, {
     ...init,
     headers,
