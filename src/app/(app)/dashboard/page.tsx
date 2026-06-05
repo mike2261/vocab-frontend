@@ -22,7 +22,7 @@ import { PassageModal } from '@/components/app/PassageModal';
 import { PosBadge } from '@/components/app/PosBadge';
 import { StageBadge } from '@/components/app/StageBadge';
 import { api } from '@/lib/api';
-import { parseApiDate } from '@/lib/datetime';
+import { addDays, getAppDateKey, parseApiDate } from '@/lib/datetime';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface Meaning {
@@ -65,20 +65,16 @@ function formatNextReview(dateStr: string | null | undefined): string {
   const now = new Date();
   const diffMs = date.getTime() - now.getTime();
   if (diffMs < 0) return 'Due now';
+  const todayKey = getAppDateKey(now);
+  const reviewKey = getAppDateKey(date);
+  if (reviewKey === todayKey) return 'Today';
+  if (reviewKey === getAppDateKey(addDays(now, 1))) return 'Tomorrow';
   const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-  if (diffDays === 0) return 'Today';
-  if (diffDays === 1) return 'Tomorrow';
   return `${diffDays}d`;
 }
 
 function isSameLocalDay(dateStr: string | undefined, compareDate: Date) {
-  const date = parseApiDate(dateStr);
-  if (!date) return false;
-  return (
-    date.getFullYear() === compareDate.getFullYear() &&
-    date.getMonth() === compareDate.getMonth() &&
-    date.getDate() === compareDate.getDate()
-  );
+  return getAppDateKey(dateStr) === getAppDateKey(compareDate);
 }
 
 function matchesPos(word: VocabWord, posFilter: string) {
@@ -168,8 +164,7 @@ export default function DashboardPage() {
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [stageFilter, setStageFilter] = useState(0);
   const [posFilter, setPosFilter] = useState('Any');
-  const [quickFilter, setQuickFilter] = useState<QuickFilter>('all');
-  const [hideNewWordsInDue, setHideNewWordsInDue] = useState(false);
+  const [quickFilter, setQuickFilter] = useState<QuickFilter>('due');
   const [vocabLoading, setVocabLoading] = useState(true);
   const [vocabError, setVocabError] = useState<string | null>(null);
 
@@ -265,7 +260,6 @@ export default function DashboardPage() {
   if (quickFilter === 'due') {
     sourceWords = allWords.filter((word) => {
       if (!dueWordIds.has(word.id)) return false;
-      if (!hideNewWordsInDue) return true;
       return !newWordsTodayIds.has(word.id);
     });
   } else if (quickFilter === 'newToday') {
@@ -294,8 +288,7 @@ export default function DashboardPage() {
   function resetFilters() {
     setStageFilter(0);
     setPosFilter('Any');
-    setQuickFilter('all');
-    setHideNewWordsInDue(false);
+    setQuickFilter('due');
     setSearch('');
     setDebouncedSearch('');
     setPage(1);
@@ -456,20 +449,6 @@ export default function DashboardPage() {
               {total} word{total !== 1 ? 's' : ''}
               {debouncedSearch ? ` matching "${debouncedSearch}"` : ''}
             </p>
-            {quickFilter === 'due' && (
-              <label className="flex items-center gap-2 rounded-full border border-neutral-200 bg-white px-3 py-1.5 text-xs font-600 text-neutral-600">
-                <input
-                  type="checkbox"
-                  checked={hideNewWordsInDue}
-                  onChange={(event) => {
-                    setHideNewWordsInDue(event.target.checked);
-                    setPage(1);
-                  }}
-                  className="h-3.5 w-3.5 rounded border-neutral-300 text-primary-500 focus:ring-primary-500"
-                />
-                Hide words added today
-              </label>
-            )}
             {quickFilter !== 'all' && (
               <button
                 onClick={() => setQuickFilter('all')}
@@ -646,20 +625,6 @@ export default function DashboardPage() {
                     {newWordsToday.length} new word{newWordsToday.length !== 1 ? 's' : ''} today
                   </button>
                 </div>
-                {quickFilter === 'due' && (
-                  <label className="mt-3 flex items-center gap-2 rounded-2xl border border-neutral-200 bg-white px-4 py-3 text-sm font-500 text-neutral-700">
-                    <input
-                      type="checkbox"
-                      checked={hideNewWordsInDue}
-                      onChange={(event) => {
-                        setHideNewWordsInDue(event.target.checked);
-                        setPage(1);
-                      }}
-                      className="h-4 w-4 rounded border-neutral-300 text-primary-500 focus:ring-primary-500"
-                    />
-                    Hide words added today
-                  </label>
-                )}
               </div>
             </div>
           </section>

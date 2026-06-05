@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { CheckCircle, Loader2, RotateCcw } from 'lucide-react';
+import { CheckCircle, ChevronRight, Loader2, RotateCcw } from 'lucide-react';
 import { api } from '@/lib/api';
 import { useAuth } from '@/contexts/AuthContext';
 import { PosBadge } from '@/components/app/PosBadge';
@@ -27,44 +27,12 @@ interface VocabWord {
   meanings?: Meaning[];
 }
 
-type Rating = 'forgot' | 'hard' | 'good' | 'easy';
-
-const RATING_BUTTONS: {
-  rating: Rating;
-  label: string;
-  className: string;
-}[] = [
-  {
-    rating: 'forgot',
-    label: 'Forgot',
-    className: 'bg-red-50 border-red-200 text-red-700 hover:bg-red-100',
-  },
-  {
-    rating: 'hard',
-    label: 'Hard',
-    className:
-      'bg-orange-50 border-orange-200 text-orange-700 hover:bg-orange-100',
-  },
-  {
-    rating: 'good',
-    label: 'Good',
-    className:
-      'bg-primary-50 border-primary-200 text-primary-700 hover:bg-primary-100',
-  },
-  {
-    rating: 'easy',
-    label: 'Easy',
-    className: 'bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100',
-  },
-];
-
 export function FlashcardReview() {
   const { token } = useAuth();
   const [queue, setQueue] = useState<VocabWord[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [completed, setCompleted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -79,7 +47,7 @@ export function FlashcardReview() {
       setQueue(res.data);
       setCurrentIndex(0);
       setIsFlipped(false);
-      if (res.data.length === 0) setCompleted(true);
+      setCompleted(res.data.length === 0);
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Failed to load words');
     } finally {
@@ -88,33 +56,27 @@ export function FlashcardReview() {
   }, [token]);
 
   useEffect(() => {
-    fetchDueWords();
+    const timeoutId = window.setTimeout(() => {
+      void fetchDueWords();
+    }, 0);
+
+    return () => window.clearTimeout(timeoutId);
   }, [fetchDueWords]);
 
   const currentWord = queue[currentIndex];
   const total = queue.length;
 
-  async function handleRate(rating: Rating) {
-    if (!currentWord || isSubmitting) return;
-    setIsSubmitting(true);
-    try {
-      await api.post(
-        `/reviews/${currentWord.id}`,
-        { rating },
-        token ?? undefined,
-      );
-      const nextIndex = currentIndex + 1;
-      if (nextIndex >= total) {
-        setCompleted(true);
-      } else {
-        setCurrentIndex(nextIndex);
-        setIsFlipped(false);
-      }
-    } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to submit rating');
-    } finally {
-      setIsSubmitting(false);
+  function handleNextCard() {
+    if (!currentWord) return;
+
+    const nextIndex = currentIndex + 1;
+    if (nextIndex >= total) {
+      setCompleted(true);
+      return;
     }
+
+    setCurrentIndex(nextIndex);
+    setIsFlipped(false);
   }
 
   if (isLoading) {
@@ -147,10 +109,10 @@ export function FlashcardReview() {
         </div>
         <div>
           <h2 className="text-2xl font-700 text-neutral-900 mb-2">
-            All caught up!
+            Stack finished
           </h2>
           <p className="text-neutral-500 text-sm">
-            You&apos;ve reviewed all your due words. Come back later for more.
+            You&apos;ve gone through all visible flashcards in this session.
           </p>
         </div>
         <button
@@ -253,19 +215,16 @@ export function FlashcardReview() {
         </div>
       </div>
 
-      {/* Rating buttons */}
+      {/* Next card */}
       {isFlipped && (
-        <div className="grid grid-cols-4 gap-2">
-          {RATING_BUTTONS.map(({ rating, label, className }) => (
-            <button
-              key={rating}
-              onClick={() => handleRate(rating)}
-              disabled={isSubmitting}
-              className={`py-3 border rounded-xl text-sm font-500 transition-colors disabled:opacity-60 disabled:cursor-not-allowed ${className}`}
-            >
-              {label}
-            </button>
-          ))}
+        <div className="flex justify-center">
+          <button
+            onClick={handleNextCard}
+            className="flex items-center gap-2 rounded-lg bg-primary-500 px-6 py-2.5 text-sm font-500 text-white transition-colors hover:bg-primary-600"
+          >
+            Next card
+            <ChevronRight size={16} />
+          </button>
         </div>
       )}
 

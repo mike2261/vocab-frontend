@@ -17,7 +17,7 @@ import { TopBar } from '@/components/app/TopBar';
 import { getStageLabel, StageBadge } from '@/components/app/StageBadge';
 import { PosBadge } from '@/components/app/PosBadge';
 import { api } from '@/lib/api';
-import { APP_TIMEZONE_LABEL, formatAppDateTime } from '@/lib/datetime';
+import { formatAppDateTime } from '@/lib/datetime';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface Example {
@@ -265,9 +265,6 @@ export default function VocabDetailPage({
             <div className="flex items-center gap-1.5">
               <Clock size={14} />
               Next review: {formatAppDateTime(word.reviewState?.nextReviewAt)}
-            </div>
-            <div className="text-xs text-neutral-400">
-              Times shown in {APP_TIMEZONE_LABEL}
             </div>
           </div>
         </div>

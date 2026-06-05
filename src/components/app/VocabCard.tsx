@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Clock } from 'lucide-react';
 import { StageBadge } from '@/components/app/StageBadge';
 import { PosBadge } from '@/components/app/PosBadge';
-import { parseApiDate } from '@/lib/datetime';
+import { addDays, getAppDateKey, parseApiDate } from '@/lib/datetime';
 
 interface Meaning {
   definition: string;
@@ -26,9 +26,11 @@ function formatNextReview(dateStr: string | null | undefined): string {
   const now = new Date();
   const diffMs = date.getTime() - now.getTime();
   if (diffMs < 0) return 'Due now';
+  const todayKey = getAppDateKey(now);
+  const reviewKey = getAppDateKey(date);
+  if (reviewKey === todayKey) return 'Due today';
+  if (reviewKey === getAppDateKey(addDays(now, 1))) return 'Due tomorrow';
   const diffDays = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
-  if (diffDays === 0) return 'Due today';
-  if (diffDays === 1) return 'Due tomorrow';
   return `Due in ${diffDays} days`;
 }
 

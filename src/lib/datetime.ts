@@ -12,6 +12,24 @@ export function parseApiDate(value: string | null | undefined) {
 export const APP_TIMEZONE = process.env.NEXT_PUBLIC_APP_TIMEZONE || 'Asia/Ho_Chi_Minh';
 export const APP_TIMEZONE_LABEL = process.env.NEXT_PUBLIC_APP_TIMEZONE_LABEL || 'GMT+7';
 
+export function getAppDateKey(value: string | Date | null | undefined) {
+  const date = value instanceof Date ? value : parseApiDate(value);
+  if (!date) return null;
+
+  return new Intl.DateTimeFormat('en-CA', {
+    timeZone: APP_TIMEZONE,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(date);
+}
+
+export function addDays(value: Date, days: number) {
+  const date = new Date(value);
+  date.setDate(date.getDate() + days);
+  return date;
+}
+
 export function formatAppDateTime(value: string | Date | null | undefined) {
   const date = value instanceof Date ? value : parseApiDate(value);
   if (!date) return '—';
