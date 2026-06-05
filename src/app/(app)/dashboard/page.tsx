@@ -179,7 +179,7 @@ export default function DashboardPage() {
     async function loadDueWords() {
       setStatsLoading(true);
       try {
-        const res = await api.get<{ data: VocabWord[] }>('/vocabularies/due?limit=100', token);
+        const res = await api.get<{ data: VocabWord[] }>('/vocabularies/due?limit=100', token ?? undefined);
         setDueWords(res.data);
       } catch {
         setDueWords([]);
@@ -206,7 +206,7 @@ export default function DashboardPage() {
         do {
           const res = await api.get<{ data: VocabWord[]; meta?: { totalPages?: number } }>(
             `/vocabularies?page=${currentPage}&pageSize=${pageSize}`,
-            token,
+            token ?? undefined,
           );
           merged.push(...res.data);
           totalPages = res.meta?.totalPages ?? 1;
